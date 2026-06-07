@@ -148,23 +148,35 @@ Research-Assistant-Agent
 ```
 ---
 
-# 🤖 Agents Overview (Table Format)
+# Agents Overview (Table Format)
 
-| Agent | Node Name | Role | Responsibilities | Used In |
-|------|----------|------|------------------|----------|
-| Router Agent | `router_node` | Entry point & workflow selector | Detects input type (PDF / Simple / Deep) and routes to correct pipeline | All workflows |
-| Query Rewriter Agent | `query_rewrite_node` | Query optimizer | Rewrites query for better retrieval and search accuracy | Simple + Deep |
-| Planner Agent | `planner_node` | Task decomposition engine | Breaks complex query into structured sub-tasks | Deep only |
-| Evidence Agent | `evidence_node` | Web research collector | Performs multi-step web search and collects evidence | Deep only |
-| Search Agent | `search_node` | Fast web retriever | Performs quick single-pass search | Simple only |
-| Extract Agent | `extract_node` | Content cleaner | Extracts relevant text and removes noise from web results | Simple only |
-| PDF Workflow Agent | `pdf_workflow_node` | Document RAG pipeline | Handles PDF ingestion, chunking, embedding, and FAISS storage | PDF only |
-| Embedding Agent | `embedding_node` | Vector embedding generator | Converts text into embeddings and stores in FAISS | PDF only |
-| Retrieval Agent | `retrieval_node` | Semantic search engine | Retrieves top-k relevant chunks from FAISS | PDF only |
-| Synthesis Agent | `synthesis_context` | Reasoning & fusion engine | Combines evidence into final structured reasoning output | Deep only |
-| Formatter Agent | `formatter_node` | Output structuring | Formats final response into clean markdown | Simple |
-| Answer Agent | `answer_node` | Final response generator | Produces concise final answer | Simple |
-| Verification Agent | `verification_node` | Quality control layer | Checks factual accuracy, removes hallucinations, validates output | All workflows |
+# Core AI Agents
+
+| # | Agent Name           | File                                      | Responsibility                                                                     |
+| - | -------------------- | ----------------------------------------- | ---------------------------------------------------------------------------------- |
+| 1 | Router Agent         | `router_node.py`                          | Decides whether to use PDF, Simple Research, or Deep Research workflow             |
+| 2 | Query Rewriter Agent | `query_rewrite_node.py`                   | Rewrites user queries for better search quality and retrieval accuracy             |
+| 3 | Planner Agent        | `planner.py` / `planner_node.py`          | Breaks complex questions into structured research tasks                            |
+| 4 | Research Agent       | `researcher.py`                           | Searches the web, gathers evidence, and collects relevant information              |
+| 5 | Synthesizer Agent    | `synthesizer.py` / `synthesis_context.py` | Combines evidence from multiple sources into a final research answer               |
+| 6 | PDF QA Agent         | `pdf_answer_node.py`                      | Answers questions using semantically retrieved PDF chunks from the vector database |
+| 7 | Verification Agent   | `verification_node.py`                    | Detects hallucinations, validates answers, and generates confidence scores         |
+
+> These agents work together to provide web research, PDF-based RAG (Retrieval-Augmented Generation), answer synthesis, and response verification in a unified multi-agent architecture.
+
+#  Supporting Workflow Components
+
+| Component           | File                    | Purpose                                                                      |
+| ------------------- | ----------------------- | ---------------------------------------------------------------------------- |
+| PDF Extraction Node | `pdf_extract_node.py`   | Extracts raw text from uploaded PDF documents                                |
+| PDF Embedding Node  | `pdf_embedding_node.py` | Chunks PDF content, generates embeddings, and stores vectors in FAISS        |
+| PDF Retriever Node  | `pdf_retriever_node.py` | Performs semantic similarity search and retrieves relevant chunks from FAISS |
+| Search Node         | `search_node.py`        | Executes web searches using Tavily Search API                                |
+| Extract Node        | `extract_node.py`       | Extracts and cleans webpage content from search results                      |
+| Formatter Node      | `formatter_node.py`     | Formats extracted content into structured markdown                           |
+| Answer Node         | `answer_node.py`        | Generates final answers in the Simple Research workflow                      |
+
+> These components support the core AI agents by handling data ingestion, retrieval, content extraction, formatting, and answer generation across both Web Research and PDF-RAG workflows.
 
 ---
 
