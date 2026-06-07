@@ -1,83 +1,41 @@
-from core.logging import logger
-import uuid
+import os
 from datetime import datetime
-from pathlib import Path
-from core.settings import MD_FILE_STORE_LOCATION
 
 
+def save_document(data: str):
 
-def save_document(
-    data: str,
-    prefix: str = "Research_Data",
-    metadata: dict | None = None,
-) -> Path:
-    """
-    Save research content into a unique markdown file.
+    if not data or not str(data).strip():
 
-    Args:
-        data: Markdown content to save.
-        prefix: File name prefix.
-        metadata: Optional metadata to include at top of file.
-
-    Returns:
-        Path to saved markdown file.
-
-    Raises:
-        ValueError: If content is empty.
-        OSError: If file write fails.
-    """
-
-    if not data or not data.strip():
-        raise ValueError("Document content cannot be empty.")
-
-    # ----------------------------------
-    # Create storage directory
-    # ----------------------------------
-    save_dir = Path(MD_FILE_STORE_LOCATION)
-    save_dir.mkdir(parents=True, exist_ok=True)
-
-    # ----------------------------------
-    # Generate unique filename
-    # ----------------------------------
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    unique_id = uuid.uuid4().hex[:6].upper()
-
-    filename = f"{prefix}_{timestamp}_{unique_id}.md"
-    file_path = save_dir / filename
-
-    # ----------------------------------
-    # Build markdown content
-    # ----------------------------------
-    md_content = ""
-
-    if metadata:
-        md_content += "# Metadata\n\n"
-
-        for key, value in metadata.items():
-            md_content += f"- **{key}**: {value}\n"
-
-        md_content += "\n---\n\n"
-
-    md_content += data
-
-    # ----------------------------------
-    # Write file
-    # ----------------------------------
-    try:
-        file_path.write_text(
-            md_content,
-            encoding="utf-8",
+        raise ValueError(
+            "Cannot save empty content."
         )
 
-        logger.info(
-            "Research document saved successfully: %s",
-            file_path,
-        )
+    output_dir = "output"
 
-        return file_path
+    os.makedirs(
+        output_dir,
+        exist_ok=True
+    )
 
-    except Exception as e:
-        logger.exception(
-            "Failed to save markdown file."
-        )
-        raise e
+    timestamp = datetime.now().strftime(
+        "%Y%m%d_%H%M%S"
+    )
+
+    filename = (
+        f"Research_Data_{timestamp}.md"
+    )
+
+    filepath = os.path.join(
+        output_dir,
+        filename
+    )
+
+    with open(
+        filepath,
+        "w",
+        encoding="utf-8"
+    ) as file:
+
+        file.write(data)
+
+    return filepath
