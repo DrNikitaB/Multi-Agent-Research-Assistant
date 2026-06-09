@@ -190,7 +190,7 @@ Research-Assistant-Agent
 ## Clone Repository
 
 ```bash
-git clone https://github.com/DrNikitaB/research-assistant-agent-main---RAG.git
+git clone https://github.com/DrNikitaB/Multi-Agent-Research-Assistant.git
 ```
 
 ---
